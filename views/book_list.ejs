@@ -1,0 +1,23 @@
+<%- include('pageHeader') %>
+
+<h1>
+    <%= title %>
+</h1>
+<ul>
+    <% if (!Array.isArray(book_list) || !book_list.length) { %>
+    <li>
+        There are NO books :(
+    </li>
+    <% } %>
+
+    <% for( const book of book_list ) { %>
+    <li>
+        <a href="<%= book.url %>">
+            <%= book.title %>
+        </a>
+        (<%= book.author.full_name %>)
+    </li>
+    <% } %>
+</ul>
+
+<%- include('pageFooter') %>

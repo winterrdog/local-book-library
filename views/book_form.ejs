@@ -1,0 +1,87 @@
+<%- include('pageHeader') %>
+
+<h1>
+    <%= title %>
+</h1>
+
+<form action="" method="post">
+    <div class="form-group">
+        <label for="title">
+            Title:
+        </label>
+        <input type="text" id="title" class="form-control" placeholder="Name of book" name="title" required="true" value=<%- `"${(!book ? '' : book.title)}"` %>>
+    </div>
+
+    <div class="form-group">
+        <label for="author">
+            Author:
+        </label>
+        <select name="author" id="author" class="form-control" type="select" placeholder="Select author" required="true">
+            <% authors.sort(function (a,b) {
+                let x = a.family_name.toUpperCase()
+                let y = b.family_name.toUpperCase()
+                return (x<y ? -1 : (x>y ? 1 : 0))
+            }) %>
+
+            <% for (const x of authors) { %>
+                <% if (book) { %>
+                    <option value=<%- `"${x._id}"` %> <%= (x._id.toString() === book.author._id.toString() ? 'selected' : '') %>>
+                        <%= x.full_name %>
+                    </option>
+                <% } else { %>
+                    <option value=<%- `"${x._id}"` %>>
+                        <%= x.full_name %>
+                    </option>
+                <% } %>
+            <% } %>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="summary">
+            Summary:
+        </label>
+        <textarea name="summary" id="summary" cols="20" rows="8" class="form-control" type="textarea" placeholder="Summary" required="true">
+            <%- (book ? book.summary : '') %>
+        </textarea>
+    </div>
+
+    <div class="form-group">
+        <label for="isbn">
+            ISBN:
+        </label>
+        <input type="text" id="isbn" class="form-control" placeholder="ISBN13" name="isbn" required="true" value=<%- `"${book?book.isbn:''}"` %>>
+    </div>
+
+    <div class="form-group">
+        <label>
+            Genre:
+        </label>
+        <div>
+            <% for(const x of genres) { %>
+                <div style="display: inline; padding-right:10px;">
+                    <input type="checkbox" class="checkbox-input" name="genre" id=<%- `"${x._id}"` %> value=<%- `"${x._id}"` %> <%= x.checked === 'true' ? 'checked' : ''  %> >
+                    <label for=<%- `"${x._id}"` %>>
+                        <%= x.name %>
+                    </label>
+                </div>
+            <% } %>
+        </div>
+    </div>
+
+    <button class="btn btn-primary" type="submit">
+        Submit
+    </button>
+</form>
+
+<% if(errors) { %>
+<ul>
+    <% for( const x of errors ) { %>
+    <li>
+        <%= x.msg %>
+    </li>
+    <% } %>
+</ul>
+<% } %>
+
+<%- include('pageFooter') %>

@@ -1,0 +1,46 @@
+<%- include('pageHeader') %>
+
+<h1>
+    <%= title %>
+</h1>
+
+<ul>
+    <% if (!Array.isArray(bookinstance_list) || !bookinstance_list.length) { %>
+    <li>
+        There are NO book copies in this library :(
+    </li>
+    <% } %>
+
+    <ul>
+        <% for( const x of bookinstance_list ) {%>
+        <li>
+            <a href="<%= x.url %>">
+                <%= x.book.title %> : <%= x.imprint %>
+            </a>
+            -
+
+            <% if(x.status === 'Available'){%>
+            <span class="text-success">
+                <%= x.status %>
+            </span>
+            <%} else if(x.status === 'Maintenance'){%>
+            <span class="text-danger">
+                <%= x.status %>
+            </span>
+            <%} else{%>
+            <span class="text-warning">
+                <%= x.status %>
+            </span>
+            <%}%>
+
+            <% if(x.status !== 'Available'){%>
+            <span>
+                ( Due: <%= x.due_back_formatted %> )
+            </span>
+            <% } %>
+        </li>
+        <%}%>
+    </ul>
+</ul>
+
+<%- include('pageFooter') %>

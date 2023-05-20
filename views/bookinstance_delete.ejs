@@ -1,0 +1,58 @@
+<%- include('pageHeader') %>
+
+<h1>
+    <%= title %>: <%= book.title %>
+</h1>
+
+<p>
+    <strong>
+        Book Summary:
+    </strong>
+
+    <br><%= book.summary %>
+
+    <br>
+    <br>
+    <strong>
+        Imprint & due date:
+    </strong>
+
+    <br><%= bookInstance.imprint %> - <%= bookInstance.due_back_formatted %>
+
+    <br>
+    <br>
+    <strong>
+        Status:
+    </strong>
+
+    <br>
+    <% if(bookInstance.status === 'Available'){%>
+    <span class="text-success">
+        <%= bookInstance.status %>
+    </span>
+    <%} else if(bookInstance.status === 'Maintenance'){%>
+    <span class="text-danger">
+        <%= bookInstance.status %>
+    </span>
+    <%} else{%>
+    <span class="text-warning">
+        <%= bookInstance.status %>
+    </span>
+    <%}%>
+</p>
+
+<p>
+    Do you really wanna delete this book instance?
+</p>
+
+<form method="post" action="">
+    <div class="form-group">
+        <input type="hidden" id="book_instance_id" class="form-control" name="book_instance_id" required="true" value="<%= bookInstance._id %>">
+    </div>
+
+    <button class="btn btn-primary" type="submit">
+        Delete BookInstance
+    </button>
+    </form>
+
+    <%- include('pageFooter') %>

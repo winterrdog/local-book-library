@@ -1,0 +1,23 @@
+<%- include('pageHeader') %>
+
+<h1>
+    <%= title %>
+</h1>
+
+<ul>
+    <% if (!Array.isArray(genre_list) || !genre_list.length) { %>
+    <li>
+        There are NO genres :(
+    </li>
+    <% } %>
+
+    <% for( const x of genre_list ) { %>
+    <li>
+        <a href="<%= x.url %>">
+            <%= x.name %>
+        </a>
+    </li>
+    <% } %>
+</ul>
+
+<%- include('pageFooter') %>

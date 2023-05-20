@@ -1,0 +1,76 @@
+<%- include('pageHeader') %>
+
+<h1>
+    <%= title %>
+</h1>
+
+<form action="" method="post">
+    <div class="form-group">
+        <label for="book">
+            Book
+        </label>
+        <select name="book" id="book" class="form-control" type="select" placeholder="Select book" required="true">
+            <% books.sort(function (a,b) {
+                let x = a.title.toUpperCase()
+                let y = b.title.toUpperCase()
+                return (x<y ? -1 : (x>y ? 1 : 0))
+            }) %>
+
+            <% for(const x of books) { %>
+                <option value="<%= x._id %>" <%- (selected_book == x._id.toString() ? 'selected':'') %>>
+                    <%= x.title %>
+                </option>
+            <% } %>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="imprint">
+            Imprint:
+        </label>
+        <input type="text" id="imprint" class="form-control" placeholder="Publisher & date information" name="imprint" required="true" value=<%- `"${(bookinstance ? bookinstance.imprint : '' )}"` %>>
+    </div>
+
+    <div class="form-group">
+        <label for="due_back">
+            Date when book is available:
+        </label>
+        <input type="date" id="due_back" class="form-control" name="due_back" value="<%- ( bookinstance ? bookinstance.norm_due_back : '') %>">
+    </div>
+
+    <div class="form-group">
+        <label for="status">
+            Status:
+        </label>
+        <select name="status" id="status" class="form-control" type="select" placeholder="Select status" required="true">
+            <option value="Maintenance">
+                Maintenance
+            </option>
+            <option value="Available">
+                Available
+            </option>
+            <option value="Loaned">
+                Loaned
+            </option>
+            <option value="Reserved">
+                Reserved
+            </option>
+        </select>
+    </div>
+
+    <button class="btn btn-primary" type="submit">
+        Submit
+    </button>
+</form>
+
+<% if(errors) { %>
+<ul>
+    <% for( const x of errors ) { %>
+    <li>
+        <%= x.msg %>
+    </li>
+    <% } %>
+</ul>
+<% } %>
+
+<%- include('pageFooter') %>

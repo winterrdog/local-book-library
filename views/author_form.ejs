@@ -1,0 +1,46 @@
+<%- include('pageHeader') %>
+
+<h1>
+    <%= title %>
+</h1>
+
+<form action="" method="POST">
+    <div class="form-group">
+        <label for="first_name">
+            First Name:
+        </label>
+        <input id="first_name" class="form-control" required="true" name="first_name" placeholder="First Name" type="text" value=<%- `"${(author ? author.first_name : '')}"` %>>
+
+        <label for="family_name">
+            Family Name:
+        </label>
+        <input id="family_name" class="form-control" required="true" name="family_name" placeholder="Family Name" type="text" value=<%- `"${(author ? author.family_name : '')}"` %>>
+    </div>
+    <div class="form-group">
+        <label for="date_of_birth">
+            Date of birth:
+        </label>
+        <input type="date" class="form-control" id="date_of_birth" name="date_of_birth" value="<%- (author ? author.norm_dob : '') %>">
+
+        <label for="date_of_death">
+            Date of death:
+        </label>
+        <input type="date" class="form-control" id="date_of_death" name="date_of_death" value="<%- (author ? author.norm_dod : '') %>">
+    </div>
+
+    <button class="btn btn-primary" type="submit">
+        Submit
+    </button>
+</form>
+
+    <% if(errors) { %>
+    <ul>
+        <% for( const x of errors ) { %>
+        <li>
+            <%= x.msg %>
+        </li>
+        <% } %>
+    </ul>
+    <% } %>
+
+<%- include('pageFooter') %>

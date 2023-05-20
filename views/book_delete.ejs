@@ -1,0 +1,62 @@
+<%- include('pageHeader') %>
+
+<h1>
+    <%= title %>: <%= book.title %>
+</h1>
+
+<p>
+    <strong>
+        Summary:
+    </strong>
+
+    <br><%= book.summary %>
+</p>
+
+<% if(book_instances.length) { %>
+<p><strong>Delete the following book instances before attempting to delete this book:</strong></p>
+<div style="margin-left:20px;margin-top:20px">
+    <h4>Book instances</h4>
+    <dl>
+        <% for(const x of book_instances) { %>
+        <dt>
+            <a href="<%= x.url %>">
+                <%= x.imprint %>
+            </a>
+        </dt>
+
+        <dd>
+            <%= x.due_back_formatted %> | 
+            <% if(x.status === 'Available'){%>
+            <span class="text-success">
+                <%= x.status %>
+            </span>
+            <%} else if(x.status === 'Maintenance'){%>
+            <span class="text-danger">
+                <%= x.status %>
+            </span>
+            <%} else{%>
+            <span class="text-warning">
+                <%= x.status %>
+            </span>
+            <%}%>
+        </dd>
+        <% } %>
+    </dl>
+</div>
+<% } else { %>
+<p>
+    Do you really wanna delete this book?
+</p>
+
+<form method="post" action="">
+    <div class="form-group">
+        <input type="hidden" id="book_id" class="form-control" name="book_id" required="true" value="<%= book._id %>">
+    </div>
+
+    <button class="btn btn-primary" type="submit">
+        Delete Book
+    </button>
+</form>
+<% } %>
+
+<%- include('pageFooter') %>

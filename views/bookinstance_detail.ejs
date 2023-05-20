@@ -1,0 +1,65 @@
+<%- include('pageHeader') %>
+
+<h1>
+    ID: <%= bookinstance._id %>
+</h1>
+
+<p>
+    <strong>
+        Title:
+    </strong>
+
+    <a href="<%= bookinstance.book.url %>">
+    <%= bookinstance.book.title %>
+    </a>
+</p>
+
+<p>
+    <strong>
+        Imprint:
+    </strong>
+    <%= bookinstance.imprint %>
+</p>
+
+<p>
+    <strong>
+        Status:
+    </strong>
+
+    <% if(bookinstance.status === 'Available'){ %>
+        <span class="text-success">
+            <%= bookinstance.status %>
+        </span>
+    <% } else if(bookinstance.status === 'Maintenance'){ %>
+        <span class="text-danger">
+            <%= bookinstance.status %>
+        </span>
+    <% } else { %>
+        <span class="text-warning">
+            <%= bookinstance.status %>
+        </span>
+    <% } %>    
+    
+    <% if(bookinstance.status !== 'Available') { %>
+        <p>
+            <strong>
+                Due back:
+            </strong>
+            <%= bookinstance.due_back_formatted %>
+        </p>
+    <% } %>
+</p>
+
+<hr>
+<p>
+    <a href="<%= bookinstance.url + '/delete' %>">
+        Delete a book instance
+    </a>
+</p>
+<p>
+    <a href="<%= bookinstance.url + '/update' %>">
+        Update a book instance
+    </a>
+</p>
+
+<%- include('pageFooter') %>

@@ -1,0 +1,43 @@
+<%- include('pageHeader') %>
+
+<h1>
+    Genre: <%= genre.name %>
+</h1>
+
+<div style="margin-left:20px;margin-top:20px">
+    <h4>
+        Books
+    </h4>
+    <dl>
+        <% if (!Array.isArray(genre_books) || !genre_books.length) { %>
+        <li>
+            There are NO genres :(
+        </li>
+        <% } %>
+
+        <%for( const x of genre_books ){%>
+        <dt>
+            <a href=<%- `"${x.url}"` %>>
+                <%= x.title %>
+            </a>
+        </dt>
+        <dd>
+            <%= x.summary %>
+        </dd>
+        <%}%>
+    </dl>
+</div>
+
+<hr>
+<p>
+    <a href=<%- `"${(genre._id + '/delete')}"` %>>
+        Delete genre
+    </a>
+</p>
+<p>
+    <a href=<%- `"${(genre._id + '/update')}"` %>>
+        Update genre
+    </a>
+</p>
+
+<%- include('pageFooter') %>

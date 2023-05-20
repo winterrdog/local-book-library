@@ -1,0 +1,36 @@
+<%- include('pageHeader') %>
+
+<h1>
+    <%= title %>
+</h1>
+
+<form action="" method="POST">
+    <div class="form-group">
+        <label for="name">
+            Genre:
+        </label>
+        <input 
+            id="name" 
+            class="form-control" 
+            required="true" <%# client-side validation %>
+            type="text" 
+            name="name" 
+            placeholder="Fantasy, Poetry etc..." 
+            value=<%- `"${(genre ? genre.name : '')}"` %>>
+    </div>
+    <button class="btn btn-primary" type="submit">
+        Add new genre
+    </button>
+
+    <% if(errors) { %>
+    <ul>
+        <% for( const x of errors ) { %>
+        <li>
+            <%= x.msg %>
+        </li>
+        <% } %>
+    </ul>
+    <% } %>
+</form>
+
+<%- include('pageFooter') %>

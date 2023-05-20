@@ -1,0 +1,44 @@
+<%- include('pageHeader') %>
+
+<h1>Author: <%= author.full_name %></h1>
+<p> Existed: <%= author.lifespan %> </p>
+
+<div style="margin-left:20px;margin-top:20px">
+    <h4>
+        Books
+    </h4>
+
+    <dl>
+        <% if (!Array.isArray(author_books) || !author_books.length) { %>
+        <p>
+            There are NO books by this author :(
+        </p>
+        <% } %>
+
+        <% for( const x of author_books ) { %>
+        <dt>
+            <a href="<%= x.url %>">
+                <%= x.title %>
+            </a>
+        </dt>
+
+        <dd>
+            <%= x.summary %>
+        </dd>
+        <% } %>
+    </dl>
+</div>
+
+<hr>
+<p>
+    <a href="<%= author.url + '/delete' %>">
+        Delete author
+    </a>
+</p>
+<p>
+    <a href="<%= author.url + '/update' %>">
+        Update author
+    </a>
+</p>
+
+<%- include('pageFooter') %>

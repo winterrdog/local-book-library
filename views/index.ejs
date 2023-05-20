@@ -1,0 +1,42 @@
+<%- include('pageHeader') %>
+<h1>
+    <%= title %>
+</h1>
+<p>
+    Welcome to my local book library, a basic Express website developed as a
+    exercise to learn node.js/express.js/mongodb in greater depth.
+</p>
+<h1>
+    Dynamic content
+</h1>
+<ul>
+    <li><strong>Books</strong>
+        <%= bookCount %>
+    </li>
+    <li><strong>Copies</strong>
+        <%= authorCount %>
+    </li>
+    <li><strong>Copies available</strong>
+        <%= genreCount %>
+    </li>
+    <li><strong>Authors</strong>
+        <%= bookInstanceCount %>
+    </li>
+    <li><strong>Genres</strong>
+        <%= bookInstanceAvailableCount %>
+    </li>
+</ul>
+
+<h3>
+    Credits:
+</h3>
+<p>
+    <strong>
+        <ul>
+            <li>
+                MDN
+            </li>
+        </ul>
+    </strong>
+</p>
+<%- include('pageFooter') %>

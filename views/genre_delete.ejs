@@ -1,0 +1,41 @@
+<%- include('pageHeader') %>
+
+<h1>
+    <%= title %>: <%= genre.name %>
+</h1>
+
+<% if(genre_books.length) { %>
+<p><strong>Delete the following books before attempting to delete this genre</strong></p>
+<div style="margin-left:20px;margin-top:20px">
+    <h4>Books</h4>
+    <dl>
+        <% for(const x of genre_books) { %>
+        <dt>
+            <a href="<%= x.url %>">
+                <%= x.title %>
+            </a>
+        </dt>
+
+        <dd>
+            <%= x.summary %>
+        </dd>
+        <% } %>
+    </dl>
+</div>
+<% } else { %>
+<p>
+    Do you really wanna delete this genre?
+</p>
+
+<form method="post" action="">
+    <div class="form-group">
+        <input type="hidden" id="genre_id" class="form-control" name="genre_id" required="true" value="<%= genre._id %>">
+    </div>
+
+    <button class="btn btn-primary" type="submit">
+        Delete genre
+    </button>
+</form>
+<% } %>
+
+<%- include('pageFooter') %>

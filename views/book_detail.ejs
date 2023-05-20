@@ -1,0 +1,104 @@
+<%- include('pageHeader') %>
+
+<h1>
+    Title: <%= title %>
+</h1>
+
+<p>
+    <strong>Author:</strong>
+    <a href="<%= book.author.url %>">
+        <%= book.author.full_name %>
+    </a>
+</p>
+
+<p><strong>
+        Summary:
+    </strong>
+    <%= book.summary %>
+</p>
+
+<p><strong>
+        ISBN:
+    </strong>
+    <%= book.isbn %>
+</p>
+
+<p><strong>
+        Genre:
+    </strong>
+    <% book.genre.forEach((item,i)=>{ %>
+    <a href="<%= item.url %>">
+        <%= item.name %>
+    </a>
+
+    <% if(i < (book.genre.length - 1)){ %>
+    ,
+    <% } %>
+    <% }) %>
+</p>
+
+<div style="margin-left:20px;margin-top:20px">
+    <h4>
+        Copies
+    </h4>
+
+    <% if (!Array.isArray(book_instances) || !book_instances.length) { %>
+    <li>
+        There are NO copies of this book in the library :(
+    </li>
+    <% } %>
+
+    <% for( const x of book_instances ){ %>
+    <hr>
+    <% if(x.status==='Available'){ %>
+    <p class="text-success">
+        <%= x.status %>
+    </p>
+    <% }else if(x.status=='Maintenance'){ %>
+    <p class="text-danger">
+        <%= x.status %>
+    </p>
+    <% }else{ %>
+    <p class="text-warning">
+        <%= x.status %>
+    </p>
+    <% } %>
+
+    <p><strong>
+            Imprint:
+        </strong>
+        <%= x.imprint %>
+    </p>
+
+    <% if(x.status !== 'Available'){ %>
+    <p>
+        <strong>
+            Due back:
+        </strong>
+        <%= x.due_back_formatted %>
+    </p>
+    <% } %>
+
+    <p><strong>
+            Id:
+        </strong>
+        <a href="<%= x.url %>">
+            <%= x._id %>
+        </a>
+    </p>
+    <% } %>
+</div>
+
+<hr>
+<p>
+    <a href="<%= book.url + '/delete' %>">
+        Delete book
+    </a>
+</p>
+<p>
+    <a href="<%= book.url + '/update' %>">
+        Update book
+    </a>
+</p>
+
+<%- include('pageFooter') %>
