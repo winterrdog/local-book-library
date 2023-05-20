@@ -72,7 +72,7 @@ module.exports.genre_create_post = [
         const errors = validationResult(req);
 
         // create a genre obj with escaped and trimmed data
-        const santzName = req.body.name;
+        const { santzName } = matchedData(req);
         const genre = new Genre({ name: santzName });
 
         // if errors are 'present', render the form again with sanitized
