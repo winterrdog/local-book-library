@@ -14,13 +14,13 @@
 <p><strong>
         Summary:
     </strong>
-    <%= book.summary %>
+    <%- book.summary %>
 </p>
 
 <p><strong>
         ISBN:
     </strong>
-    <%= book.isbn %>
+    <%- book.isbn %>
 </p>
 
 <p><strong>
@@ -67,7 +67,7 @@
     <p><strong>
             Imprint:
         </strong>
-        <%= x.imprint %>
+        <%- x.imprint %>
     </p>
 
     <% if(x.status !== 'Available'){ %>

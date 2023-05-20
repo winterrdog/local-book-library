@@ -60,7 +60,7 @@
         <div>
             <% for(const x of genres) { %>
                 <div style="display: inline; padding-right:10px;">
-                    <input type="checkbox" class="checkbox-input" name="genre" id=<%- `"${x._id}"` %> value=<%- `"${x._id}"` %> <%= x.checked === 'true' ? 'checked' : ''  %> >
+                    <input type="checkbox" class="checkbox-input" name="genre" id="<%- x._id %>" value="<%- x._id %>" <%= x.checked === 'true' ? 'checked' : ''  %> >
                     <label for=<%- `"${x._id}"` %>>
                         <%= x.name %>
                     </label>
