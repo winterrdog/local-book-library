@@ -43,12 +43,7 @@ async function genreCreate(name) {
     console.log(`Added genre: ${name}`);
 }
 
-async function authorCreate(
-    first_name,
-    family_name,
-    d_birth,
-    d_death
-) {
+async function authorCreate(first_name, family_name, d_birth, d_death) {
     authordetail = {
         first_name: first_name,
         family_name: family_name,
@@ -182,12 +177,7 @@ async function createBookInstances() {
             false,
             "Loaned"
         ),
-        bookInstanceCreate(
-            books[2],
-            " Gollancz, 2015.",
-            false,
-            false
-        ),
+        bookInstanceCreate(books[2], " Gollancz, 2015.", false, false),
         bookInstanceCreate(
             books[3],
             "New York Tom Doherty Associates, 2016.",

@@ -334,8 +334,7 @@ module.exports.book_update_post = [
             author,
             summary,
             isbn,
-            genre:
-                typeof data.genre === "undefined" ? [] : data.genre,
+            genre: typeof data.genre === "undefined" ? [] : data.genre,
             _id: req.params.id, //needed so as to avoid assignment of a new ID
         });
 
