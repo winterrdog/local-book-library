@@ -1,6 +1,9 @@
 {
     "name": "local-library",
-    "version": "0.0.0",
+    "version": "1.0.0",
+    "engines": {
+        "node": ">=18.14.2"
+    },
     "private": true,
     "scripts": {
         "start": "node ./bin/www",
@@ -22,6 +25,7 @@
         "morgan": "~1.9.1"
     },
     "devDependencies": {
-        "ejs-lint": "^2.0.0"
+        "ejs-lint": "^2.0.0",
+        "nodemon": "^2.0.22"
     }
 }
