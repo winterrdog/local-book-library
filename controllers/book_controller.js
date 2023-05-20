@@ -327,14 +327,15 @@ module.exports.book_update_post = [
         const errors = validationResult(req);
 
         // create a book with old id
-        const { title, author, summary, isbn, req_genre } =
-            matchedData(req);
+        const data = matchedData(req);
+        const { title, author, summary, isbn } = data;
         const book = new Book({
             title,
             author,
             summary,
             isbn,
-            genre: typeof req_genre === "undefined" ? [] : req_genre,
+            genre:
+                typeof data.genre === "undefined" ? [] : data.genre,
             _id: req.params.id, //needed so as to avoid assignment of a new ID
         });
 
