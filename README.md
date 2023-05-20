@@ -21,5 +21,5 @@ i wrote this project as a lesson to learn a lot more mongoDB and express.js( plu
     ```
 - run in `debug` mode:
     ```sh
-    npm run start
+    npm run devStart
     ```
