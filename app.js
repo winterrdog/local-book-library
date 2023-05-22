@@ -25,6 +25,13 @@ app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
 // middleware
+const rateLimit = require("express-rate-limit"); // add rate limiting
+const limiter = rateLimit({
+    windowMs: 1 * 60 * 1000, // try again after 1 min
+    max: 20,
+});
+app.use(limiter); // apply rate limit to all routes
+
 app.use(helmet()); // set appropriate HTTP headers that help protect your app from well-known web vulnerabilities
 app.use(
     helmet(
