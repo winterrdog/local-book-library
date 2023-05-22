@@ -1,24 +1,15 @@
 const asyncHandler = require("express-async-handler");
 const mongs = require("mongoose");
-const {
-    body,
-    validationResult,
-    matchedData,
-} = require("express-validator");
+const { body, validationResult, matchedData } = require("express-validator");
+const debug = require("debug")("local-library:author");
 
 // models
 const Author = require("../models/author");
 const Book = require("../models/book");
 
 // Display list of all authors
-module.exports.author_list = asyncHandler(async function (
-    req,
-    res,
-    next
-) {
-    const allAuthors = await Author.find({})
-        .sort({ family_name: 1 })
-        .exec();
+module.exports.author_list = asyncHandler(async function (req, res, next) {
+    const allAuthors = await Author.find({}).sort({ family_name: 1 }).exec();
 
     res.render("author_list", {
         title: "Authors list",
@@ -27,11 +18,7 @@ module.exports.author_list = asyncHandler(async function (
 });
 
 // display detail page for a specific author
-module.exports.author_detail = asyncHandler(async function (
-    req,
-    res,
-    next
-) {
+module.exports.author_detail = asyncHandler(async function (req, res, next) {
     const authorId = new mongs.Types.ObjectId(req.params.id);
     const [author, allBooksByAuthor] = await Promise.all([
         Author.findById(authorId).exec(),
@@ -40,6 +27,7 @@ module.exports.author_detail = asyncHandler(async function (
 
     // no results
     if (!author) {
+        debug(`id not found when getting author details: ${req.params.id}`);
         const err = new Error("Author not found");
         err.status = 404;
         return next(err);
@@ -104,6 +92,7 @@ module.exports.author_create_post = [
         // if there are errors. Render form again with
         // sanitized values/errors messages.
         if (!errors.isEmpty()) {
+            debug(`validation errors from the user input: ${errors.array()}`);
             return res.render("author_form", {
                 title: "Create author",
                 author: author,
@@ -131,6 +120,9 @@ module.exports.author_delete_get = asyncHandler(async function (
 
     // no results
     if (!author) {
+        debug(
+            `id not found when querying the author to delete: ${req.params.id}`
+        );
         res.redirect("/catalog/authors");
         return;
     }
@@ -156,6 +148,9 @@ module.exports.author_delete_post = asyncHandler(async function (
 
     // no results
     if (!author) {
+        debug(
+            `id not found when posting the author to delete: ${req.params.id}`
+        );
         res.redirect("/catalog/authors");
         return;
     }
@@ -186,6 +181,9 @@ module.exports.author_update_get = asyncHandler(async function (
 
     // no results
     if (!author) {
+        debug(
+            `id not found when querying the author to update: ${req.params.id}`
+        );
         const err = new Error("Author not found");
         err.status = 404;
         return next(err);
@@ -246,6 +244,9 @@ module.exports.author_update_post = [
         // if there are errors. Render form again with
         // sanitized values/errors messages.
         if (!errors.isEmpty()) {
+            debug(
+                `id not found when posting the author to update: ${req.params.id}`
+            );
             return res.render("author_form", {
                 title: "Update an author",
                 author: author,

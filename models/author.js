@@ -45,10 +45,7 @@ AuthorSchema.virtual("norm_dob").get(function () {
         return "";
     }
 
-    const month = String(this.date_of_birth.getMonth() + 1).padStart(
-        2,
-        "0"
-    );
+    const month = String(this.date_of_birth.getMonth() + 1).padStart(2, "0");
     const day = String(this.date_of_birth.getDate()).padStart(2, "0");
     const year = this.date_of_birth.getFullYear();
 
@@ -60,10 +57,7 @@ AuthorSchema.virtual("norm_dod").get(function () {
         return "";
     }
 
-    const month = String(this.date_of_death.getMonth() + 1).padStart(
-        2,
-        "0"
-    );
+    const month = String(this.date_of_death.getMonth() + 1).padStart(2, "0");
     const day = String(this.date_of_death.getDate()).padStart(2, "0");
     const year = this.date_of_death.getFullYear();
 

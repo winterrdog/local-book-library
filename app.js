@@ -3,6 +3,7 @@ const express = require("express");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
+const debug = require("debug")("local-library:app");
 
 const app = express();
 
@@ -14,8 +15,8 @@ const db_uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWD}@db
 
 mongs
     .connect(db_uri)
-    .then(() => console.log("-- connected to db"))
-    .catch((err) => console.error(err.message));
+    .then(() => debug("-- connected to db"))
+    .catch((err) => debug(err.message));
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));

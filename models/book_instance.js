@@ -43,10 +43,7 @@ BookInstanceSchema.virtual("norm_due_back").get(function () {
 });
 
 // create model
-const BookInstanceModel = mongs.model(
-    "BookInstance",
-    BookInstanceSchema
-);
+const BookInstanceModel = mongs.model("BookInstance", BookInstanceSchema);
 
 // export the model
 module.exports = BookInstanceModel;

@@ -1,10 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const mongs = require("mongoose");
-const {
-    body,
-    validationResult,
-    matchedData,
-} = require("express-validator");
+const { body, validationResult, matchedData } = require("express-validator");
+const debug = require("debug")("local-library:book_instance");
 
 // models
 const Book = require("../models/book");
@@ -39,6 +36,9 @@ module.exports.book_instance_detail = asyncHandler(async function (
 
     // no results
     if (!bookinstance) {
+        debug(
+            `id not found when querying the book instance's detail: ${req.params.id}`
+        );
         const err = new Error("Book copy not found");
         err.status = 404;
         return next(err);
@@ -69,10 +69,7 @@ module.exports.book_instance_create_get = asyncHandler(async function (
 
 // Handle book_instance create on POST.
 module.exports.book_instance_create_post = [
-    body("book", "Book must be specified")
-        .trim()
-        .isLength({ min: 1 })
-        .escape(),
+    body("book", "Book must be specified").trim().isLength({ min: 1 }).escape(),
     body("imprint", "Imprint must be speicfied")
         .trim()
         .isLength({ min: 1 })
@@ -92,6 +89,9 @@ module.exports.book_instance_create_post = [
 
         // if there are validation errors
         if (!errors.isEmpty()) {
+            debug(
+                `id not found when creating a book instance: ${req.params.id}`
+            );
             const allBooks = await Book.find({}, "title").exec();
 
             return res.render("bookinstance_form", {
@@ -121,6 +121,9 @@ module.exports.book_instance_delete_get = asyncHandler(async function (
 
     // no results
     if (!bookInstance) {
+        debug(
+            `id not found when querying the book instance to delete: ${req.params.id}`
+        );
         res.redirect("/catalog/bookinstances");
         return;
     }
@@ -138,12 +141,13 @@ module.exports.book_instance_delete_post = asyncHandler(async function (
     res,
     next
 ) {
-    const bookInstance = await BookInstance.findById(
-        req.params.id
-    ).exec();
+    const bookInstance = await BookInstance.findById(req.params.id).exec();
 
     // no results
     if (!bookInstance) {
+        debug(
+            `id not found when posting the book instance to delete: ${req.params.id}`
+        );
         res.redirect("/catalog/bookinstances");
         return;
     }
@@ -166,6 +170,9 @@ module.exports.book_instance_update_get = asyncHandler(async function (
 
     // no results
     if (!book_instance) {
+        debug(
+            `id not found when querying the book instance to update: ${req.params.id}`
+        );
         const err = new Error("Book instance not found");
         err.status = 404;
         return next(err);
@@ -182,10 +189,7 @@ module.exports.book_instance_update_get = asyncHandler(async function (
 
 // Handle book_instance update on POST.
 module.exports.book_instance_update_post = [
-    body("book", "Book must be specified")
-        .trim()
-        .isLength({ min: 1 })
-        .escape(),
+    body("book", "Book must be specified").trim().isLength({ min: 1 }).escape(),
     body("imprint", "Imprint must be speicfied")
         .trim()
         .isLength({ min: 1 })
@@ -208,6 +212,7 @@ module.exports.book_instance_update_post = [
 
         // if there are validation errors
         if (!errors.isEmpty()) {
+            debug(`validation errors from client: ${errors.array()}`);
             const allBooks = await Book.find({}, "title").exec();
 
             return res.render("bookinstance_form", {

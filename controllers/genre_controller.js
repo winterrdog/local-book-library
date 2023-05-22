@@ -1,19 +1,14 @@
 const mongs = require("mongoose");
 const asyncHandler = require("express-async-handler");
-const {
-    body,
-    validationResult,
-    matchedData,
-} = require("express-validator");
+const { body, validationResult, matchedData } = require("express-validator");
+const debug = require("debug")("local-library:genre");
+
+// models
 const Genre = require("../models/genre");
 const Book = require("../models/book");
 
 // Display list of all genres
-module.exports.genre_list = asyncHandler(async function (
-    req,
-    res,
-    next
-) {
+module.exports.genre_list = asyncHandler(async function (req, res, next) {
     const allGenres = await Genre.find({}).sort({ name: 1 }).exec();
 
     res.render("genre_list", {
@@ -23,11 +18,7 @@ module.exports.genre_list = asyncHandler(async function (
 });
 
 // display detail page for a specific genre
-module.exports.genre_detail = asyncHandler(async function (
-    req,
-    res,
-    next
-) {
+module.exports.genre_detail = asyncHandler(async function (req, res, next) {
     // get details of genre and all associated books( in parallel )
     const genreID = new mongs.Types.ObjectId(req.params.id);
     const [genre, booksInGenre] = await Promise.all([
@@ -37,6 +28,7 @@ module.exports.genre_detail = asyncHandler(async function (
 
     // no results
     if (!genre) {
+        debug(`id not found when querying genre's detail: ${req.params.id}`);
         const err = new Error("Genre not found");
         err.status = 404;
         return next(err);
@@ -78,6 +70,7 @@ module.exports.genre_create_post = [
         // if errors are 'present', render the form again with sanitized
         // values/error messages
         if (!errors.isEmpty()) {
+            debug(`validation errors from client: ${errors.array()}`);
             return res.render("genre_form", {
                 title: "Create a genre",
                 genre,
@@ -100,11 +93,7 @@ module.exports.genre_create_post = [
 ];
 
 // Display genre delete form on GET.
-module.exports.genre_delete_get = asyncHandler(async function (
-    req,
-    res,
-    next
-) {
+module.exports.genre_delete_get = asyncHandler(async function (req, res, next) {
     // get details of a genre and all the books
     const [genre, allBooksInGenre] = await Promise.all([
         Genre.findById(req.params.id).exec(),
@@ -113,6 +102,7 @@ module.exports.genre_delete_get = asyncHandler(async function (
 
     // no results from db
     if (!genre) {
+        debug(`id not found when querying genre to delete: ${req.params.id}`);
         res.redirect("/catalog/genres");
         return;
     }
@@ -138,6 +128,7 @@ module.exports.genre_delete_post = asyncHandler(async function (
 
     // no results from db
     if (!genre) {
+        debug(`id not found when posting genre to delete: ${req.params.id}`);
         res.redirect("/catalog/genres");
         return;
     }
@@ -158,16 +149,13 @@ module.exports.genre_delete_post = asyncHandler(async function (
 });
 
 // Display genre update form on GET.
-module.exports.genre_update_get = asyncHandler(async function (
-    req,
-    res,
-    next
-) {
+module.exports.genre_update_get = asyncHandler(async function (req, res, next) {
     // get necessary genre from db
     const genre = await Genre.findById(req.params.id).exec();
 
     // no results
     if (!genre) {
+        debug(`id not found when querying genre to update: ${req.params.id}`);
         const err = new Error("Genre not found");
         err.status = 404;
         return next(err);
@@ -204,6 +192,7 @@ module.exports.genre_update_post = [
         // if errors are 'present', render the form again with sanitized
         // values/error messages
         if (!errors.isEmpty()) {
+            debug(`validation errors from client: ${errors.array()}`);
             return res.render("genre_form", {
                 title: "Create a genre",
                 genre,

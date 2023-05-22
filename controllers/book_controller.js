@@ -1,10 +1,7 @@
 const mongs = require("mongoose");
 const asyncHandler = require("express-async-handler");
-const {
-    body,
-    validationResult,
-    matchedData,
-} = require("express-validator");
+const { body, validationResult, matchedData } = require("express-validator");
+const debug = require("debug")("local-library:book");
 
 // models
 const Book = require("../models/book");
@@ -40,11 +37,7 @@ module.exports.index = asyncHandler(async function (req, res, next) {
 });
 
 // Display list of all books
-module.exports.book_list = asyncHandler(async function (
-    req,
-    res,
-    next
-) {
+module.exports.book_list = asyncHandler(async function (req, res, next) {
     // get all books from DB
     const allBooks = await Book.find({}, "title author")
         .sort({ title: 1 })
@@ -59,23 +52,17 @@ module.exports.book_list = asyncHandler(async function (
 });
 
 // display detail page for a specific book
-module.exports.book_detail = asyncHandler(async function (
-    req,
-    res,
-    next
-) {
+module.exports.book_detail = asyncHandler(async function (req, res, next) {
     // get details of books, book instances for specific book
     const bookId = new mongs.Types.ObjectId(req.params.id);
     const [book, bookInstances] = await Promise.all([
-        Book.findById(bookId)
-            .populate("author")
-            .populate("genre")
-            .exec(),
+        Book.findById(bookId).populate("author").populate("genre").exec(),
         BookInstance.find({ book: bookId }).exec(),
     ]);
 
     // no results
     if (book === null) {
+        debug(`id not found when querying the book's detail: ${req.params.id}`);
         const err = new Error("Book not found");
         err.status = 404;
         return next(err);
@@ -89,11 +76,7 @@ module.exports.book_detail = asyncHandler(async function (
 });
 
 // display book create form on GET
-module.exports.book_create_get = asyncHandler(async function (
-    req,
-    res,
-    next
-) {
+module.exports.book_create_get = asyncHandler(async function (req, res, next) {
     // get all authors and genres, which we
     // can use for adding to our book.
     const [allAuthors, allGenres] = await Promise.all([
@@ -162,6 +145,9 @@ module.exports.book_create_post = [
 
         // render form again in case of errors with input data
         if (!errors.isEmpty()) {
+            debug(
+                `validation errors during creating a book: ${errors.array()}`
+            );
             const [allAuthors, allGenres] = await Promise.all([
                 Author.find({}).exec(),
                 Genre.find({}).exec(),
@@ -190,11 +176,7 @@ module.exports.book_create_post = [
 ];
 
 // Display book delete form on GET.
-module.exports.book_delete_get = asyncHandler(async function (
-    req,
-    res,
-    next
-) {
+module.exports.book_delete_get = asyncHandler(async function (req, res, next) {
     const [book, allBookInstances] = await Promise.all([
         Book.findById(req.params.id).exec(),
         BookInstance.find({ book: req.params.id }).exec(),
@@ -202,6 +184,9 @@ module.exports.book_delete_get = asyncHandler(async function (
 
     // no results
     if (book === null) {
+        debug(
+            `id not found when querying the book to delete: ${req.params.id}`
+        );
         res.redirect("/catalog/books");
         return;
     }
@@ -214,11 +199,7 @@ module.exports.book_delete_get = asyncHandler(async function (
 });
 
 // Handle book delete on POST.
-module.exports.book_delete_post = asyncHandler(async function (
-    req,
-    res,
-    next
-) {
+module.exports.book_delete_post = asyncHandler(async function (req, res, next) {
     const [book, allBookInstances] = await Promise.all([
         Book.findById(req.params.id).exec(),
         BookInstance.find({ book: req.params.id }).exec(),
@@ -226,6 +207,7 @@ module.exports.book_delete_post = asyncHandler(async function (
 
     // no results
     if (book === null) {
+        debug(`id not found when posting the book to delete: ${req.params.id}`);
         res.redirect("/catalog/books");
         return;
     }
@@ -246,11 +228,7 @@ module.exports.book_delete_post = asyncHandler(async function (
 });
 
 // Display book update form on GET.
-module.exports.book_update_get = asyncHandler(async function (
-    req,
-    res,
-    next
-) {
+module.exports.book_update_get = asyncHandler(async function (req, res, next) {
     // get book, authors and genres for form
     const [book, allAuthors, allGenres] = await Promise.all([
         Book.findById(req.params.id)
@@ -263,6 +241,9 @@ module.exports.book_update_get = asyncHandler(async function (
 
     // if no results, send out a 404 page
     if (book === null) {
+        debug(
+            `id not found when querying the book to update: ${req.params.id}`
+        );
         const err = new Error("Book not found");
         err.status = 404;
         return next(err);
@@ -315,10 +296,7 @@ module.exports.book_update_post = [
         .trim()
         .isLength({ min: 1 })
         .escape(),
-    body("isbn", "isbn must NOT be empty")
-        .trim()
-        .isLength({ min: 1 })
-        .escape(),
+    body("isbn", "isbn must NOT be empty").trim().isLength({ min: 1 }).escape(),
     body("genre.*").escape(),
 
     // process request only after validation & sanitization
@@ -339,6 +317,9 @@ module.exports.book_update_post = [
         });
 
         if (!errors.isEmpty()) {
+            debug(
+                `validation errors during updating a book on POST: ${req.params.id}`
+            );
             // get all authors and genres for form
             const [allAuthors, allGenres] = await Promise.all([
                 Author.find({}).exec(),
@@ -362,13 +343,9 @@ module.exports.book_update_post = [
         }
 
         // if data is valid. update the record
-        const the_book = await Book.findByIdAndUpdate(
-            req.params.id,
-            book,
-            {
-                runValidators: true,
-            }
-        );
+        const the_book = await Book.findByIdAndUpdate(req.params.id, book, {
+            runValidators: true,
+        });
 
         // redirect to the detail page
         return res.redirect(the_book.url);
