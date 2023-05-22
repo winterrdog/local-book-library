@@ -5,6 +5,7 @@ const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const debug = require("debug")("local-library:app");
 const compression = require("compression");
+const helmet = require("helmet");
 
 const app = express();
 
@@ -24,6 +25,16 @@ app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
 // middleware
+app.use(helmet()); // set appropriate HTTP headers that help protect your app from well-known web vulnerabilities
+app.use(
+    helmet(
+        helmet.contentSecurityPolicy({
+            directives: {
+                "script-src": ["self", "code.jquery.com", "cdn.jsdelivr.net"],
+            },
+        })
+    )
+); // Set CSP headers to allow our Bootstrap and Jquery to be served
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
